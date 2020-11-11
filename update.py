@@ -4,6 +4,7 @@ import re
 import os
 import sys
 from time import sleep
+import glob
 
 from bs4 import BeautifulSoup
 from seleniumwire import webdriver
@@ -17,9 +18,9 @@ TIMEOUT = 10
 IFRAME_CSS_SELECTOR = '.iframe-container>iframe'
 
 if __name__ == '__main__':
-    if not os.path.isfile('ustvgo.m3u8'):
-        print('playlist ustvgo.m3u8 not found', file=sys.stderr)
-        exit(1)
+    #if not os.path.isfile('ustvgo.m3u8'):
+    #    print('playlist ustvgo.m3u8 not found', file=sys.stderr)
+    #    exit(1)
 
     print('Updating authentication key, please wait...')
 
@@ -110,8 +111,11 @@ if __name__ == '__main__':
     playlist_text = open('ustvgo.m3u8', 'r').read()
     playlist_text = re.sub('(?<=wmsAuthSign=).*(?=\n)', captured_key, playlist_text)
 
-    with open('ustvgo.m3u8', 'w') as file:
-        file.write(playlist_text)
+
+    for filepath in glob.iglob(r'*.m3u8'):
+        print(filepath)
+        with open('filepath.m3u8', 'w') as file:
+            file.write(playlist_text)
 
     driver.close()
     driver.quit()

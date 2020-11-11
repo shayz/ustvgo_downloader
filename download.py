@@ -14,7 +14,7 @@ from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
 PROXY = None  # 'host:port' or None
 TIMEOUT = 10
-MAX_RETRIES = 3
+MAX_RETRIES = 1
 IFRAME_CSS_SELECTOR = '.iframe-container>iframe'
 
 if __name__ == '__main__':
@@ -121,13 +121,13 @@ if __name__ == '__main__':
                     break
 
     print('Generating ustvgo.m3u8 playlist...', file=sys.stderr)
-    with open('ustvgo.m3u8', 'w') as file:
-        file.write('#EXTM3U\n\n')
-        for name, url in video_links:
-            file.write('#EXTINF:-1,' + name + '\n')
-            file.write("#EXTVLCOPT:http-user-agent=\"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:71.0) Gecko/20100101 Firefox/71.0\"\n")
-            file.write("#EXTVLCOPT:http-referrer=\"https://ustvgo.tv\"\n")
-            file.write(url + '\n\n')
+    for name, url in video_links:
+        with open(name + '.m3u8', 'w') as file:
+                file.write('#EXTM3U\n\n')
+                file.write('#EXTINF:-1,' + name + '\n')
+                file.write("#EXTVLCOPT:http-user-agent=\"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:71.0) Gecko/20100101 Firefox/71.0\"\n")
+                file.write("#EXTVLCOPT:http-referrer=\"https://ustvgo.tv\"\n")
+                file.write(url + '\n\n')
 
     driver.close()
     driver.quit()
