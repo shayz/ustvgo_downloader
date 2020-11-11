@@ -108,13 +108,14 @@ if __name__ == '__main__':
 
     print('Updating ustvgo.m3u8 playlist...', file=sys.stderr)
 
-    playlist_text = open('ustvgo.m3u8', 'r').read()
-    playlist_text = re.sub('(?<=wmsAuthSign=).*(?=\n)', captured_key, playlist_text)
-
-
     for filepath in glob.iglob(r'*.m3u8'):
         print(filepath)
-        with open('filepath.m3u8', 'w') as file:
+        with open(filepath, 'a+') as file:
+            file.seek(0) #get to the first position
+            playlist_text = file.read()
+            playlist_text = re.sub('(?<=wmsAuthSign=).*(?=\n)', captured_key, playlist_text)
+            file.seek(0) #get to the first position
+            file.truncate()
             file.write(playlist_text)
 
     driver.close()
